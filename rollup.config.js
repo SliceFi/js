@@ -1,15 +1,24 @@
-import babel from '@rollup/plugin-babel';
+import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import nodePolyfills from 'rollup-plugin-polyfill-node';
-import nodeResolve from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
+import babel from '@rollup/plugin-babel';
 import terser from '@rollup/plugin-terser';
 
-export const createConfigs = (options) => {
-  const { builds, ...otherOptions } = options;
-  return builds.map((build) => createConfig(build, otherOptions));
+export default {
+  input: 'src/index.js', // Adjust based on your entry point
+  output: {
+    file: 'dist/bundle.js',
+    format: 'cjs', // or 'esm' or any format Rollup supports
+  },
+  plugins: [
+    resolve(),
+    commonjs(),
+    json(),
+    babel({ babelHelpers: 'bundled' }),
+    terser(),
+  ],
 };
+
 
 const createConfig = (build, options) => {
   const {
